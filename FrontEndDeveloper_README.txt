@@ -16,7 +16,7 @@ TestFrontend.java
 
 Additional Contributions:
 -------------------------
-I organized a few of the meetings we had on Teams.
+I organized one of the meetings we had on Teams.
 
 
 Signature:

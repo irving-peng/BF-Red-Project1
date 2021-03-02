@@ -7,8 +7,11 @@
 // Lecturer: GARY DAHL
 // Notes to Grader: <optional extra notes>
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.List;
+import java.util.Scanner;
+
 
 public class Frontend {
 	
@@ -50,7 +53,6 @@ public class Frontend {
         }
 
         boolean exit = false;
-        int step = 1;
         List<String> genres = be.getAllGenres();
         String mode = "b";
         List<MovieInterface> movies = be.getThreeMovies(0);
@@ -106,8 +108,8 @@ public class Frontend {
                 inp = in.nextLine();
                 while(isInt(inp)){
                     
-                    String gen = genres.get(Integer.parseInt(inp)-1));
-                    if(!be.getGenres().contains(gen){
+                    String gen = genres.get(Integer.parseInt(inp)-1);
+                    if(!be.getGenres().contains(gen)){
                         be.addGenre(gen);
                     }
                     else{
@@ -147,8 +149,8 @@ public class Frontend {
                 inp = in.nextLine();
                 while(isInt(inp)){
                     
-                    String gen = genres.get(Integer.parseInt(inp)-1));
-                    if(!be.getGenres().contains(gen){
+                    String gen = genres.get(Integer.parseInt(inp)-1);
+                    if(!be.getGenres().contains(gen)){
                         be.addGenre(gen);
                     }
                     else{

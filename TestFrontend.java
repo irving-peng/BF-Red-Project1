@@ -12,6 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.io.StringReader;
 /**
  * This class contains a set of tests for the front end of the Movie Mapper project.
  */
@@ -64,7 +65,7 @@ nitely!): ");
                     // set the output to the stream captor to read the output of the front end
                     System.setOut(new PrintStream(outputStreamCaptor));
                     // instantiate when front end is implemented
-                    Object frontend = null; /* new Frontend();
+                    Object frontend = new Frontend();
                     ((Frontend)frontend).run(new Backend(new StringReader(
                                     "title,original_title,year,genre,duration,country,language,director,writer,production_company,actors,description,avg_vote\n"
                                     + "The Source of Shadows,The Source of Shadows,2020,Horror,83,USA,English,\"Ryan Bury, Jennifer Bonior\",\"Jennifer Bonior, Trevor Botkin\",Four

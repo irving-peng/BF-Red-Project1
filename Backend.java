@@ -141,7 +141,22 @@ public class Backend{
     
   }
   public List<MovieObject> getThreeMovies(int startingIndex) {
-    return null;
+    Iterator<String> Mvit = keys.iterator();
+    ArrayList<MovieObject> finalM = new ArrayList<MovieObject>(3);
+    ArrayList<MovieObject> workingM = new ArrayList<MovieObject>(keys.size());
+    while (Mvit.hasNext()) {
+      String currentKey = Mvit.next();
+    for (int i=0; i<3; i++) {
+      if (workingM.get(i) == null) workingM.add(bigTable.get(currentKey));
+      else {
+        if (bigTable.get(currentKey).getAvgVote()>workingM.get(i).getAvgVote()) {
+          workingM.add(i,bigTable.get(currentKey));
+        }
+      }
+    }
+    }
+    for (int a=0; a<3; a++) finalM.set(a, workingM.get(a));
+    return finalM;
   }
   public List<String> getAllGenres() {
     return allGenres;

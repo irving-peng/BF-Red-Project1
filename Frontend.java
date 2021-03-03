@@ -7,11 +7,8 @@
 // Lecturer: GARY DAHL
 // Notes to Grader: <optional extra notes>
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.List;
 import java.util.Scanner;
-
 
 public class Frontend {
 	
@@ -31,19 +28,7 @@ public class Frontend {
         return true;
     }
 
-    public static void main(String[] args){
-        Backend be;
-        String path = args[0];
-        BufferedReader csvReader = new BufferedReader(new FileReader(path));
-        String row = csvReader.readLine();
-        String data = "";
-        while (row != null) {
-            data = data + row + "\n";
-            row = csvReader.readLine();
-        }
-        csvReader.close();
-        be = new Backend(data);
-
+    public static void run(Backend be){
         //Scanner to get Input from User 
         Scanner in = new Scanner(System.in); 
 
@@ -171,4 +156,9 @@ public class Frontend {
         }
 
     }
+    
+
+    public static void main(String[] args){
+        Backend be = new Backend(args[0]);
+        run(be);
 }

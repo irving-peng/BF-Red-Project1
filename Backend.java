@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.DataFormatException;
@@ -14,6 +15,7 @@ public class Backend implements BackendInterface{
   private ArrayList<String> keys;
   private ArrayList<Integer> Ratings;
   private ArrayList<String> allGenres;
+  //uses a file reader vs a path
   public Backend(FileReader FileRead){
     List<MovieInterface> BigList;
     MovieDataReaderInterface read = new MovieDataReader();
@@ -44,37 +46,44 @@ public class Backend implements BackendInterface{
         if (!allGenres.contains(cGenre)) {
           allGenres.add(cGenre); 
           gcount++;}
-        if (gcount+2 == allGenres.size()) {
-          ArrayList<String> newAllGenres = new ArrayList<String>((gcount+2)*2);
-          Iterator<String> genit2 = allGenres.iterator();
-          while (genit2.hasNext()) newAllGenres.add(genit2.next());
-          allGenres = newAllGenres;
         }
         }
-      }
+      /*System.out.println("loaded ratings:");
+      System.out.println(BigList.get(0).getAvgVote());
+      System.out.println(BigList.get(1).getAvgVote());
+      System.out.println(BigList.get(2).getAvgVote());
+      */
       inList = new ArrayList<String>(BigList.size());
       Genres = new ArrayList<String>(10);
-      ArrayList<Integer> Ratings = new ArrayList<Integer>(11);
+      Ratings = new ArrayList<Integer>(11);
       size = 0;
-      
-    
-  }
+      }
+  
+  
+  //just uses a path
   public Backend(String FilePath) throws FileNotFoundException {
     List<MovieInterface> BigList;
     FileReader file = new FileReader(FilePath);
-    MovieDataReaderInterface read = new MovieDataReader();
+    MovieDataReader read = new MovieDataReader();
     try {
+      ///System.out.println("Right before readdataset");
       BigList = read.readDataSet(file);
-      } catch (IOException DataFormatException) { System.out.println("File format error");
+      } catch (IOException IOException){ System.out.println("File format error");
       return;}
+      catch (DataFormatException DataException) {
+        System.out.println("File format error");
+        return;
+      }/*
+    System.out.println("Succesfully loaded in file, film count:");
+    System.out.println(BigList.size());
+    */
     bigTable = new HashTableMap<String, MovieInterface>(BigList.size()*2);
     keys = new ArrayList<String>(BigList.size());
     for (int i=0; i<BigList.size(); i++) {
       MovieInterface current = BigList.get(i);
-      String key = "";
-      for (int a=0; a<current.getGenres().size(); a++) key.concat(current.getGenres().get(a));
-      key.concat(current.getTitle());
-      key.concat(current.getDirector());
+      String key = current.getDirector();
+      for (int a=0; a<current.getGenres().size(); a++) key= key+current.getGenres().get(a);
+      key=key+current.getTitle();
       bigTable.put(key, current);
       keys.add(key);
       Iterator<String> itGenre = current.getGenres().iterator();
@@ -96,9 +105,8 @@ public class Backend implements BackendInterface{
       }
       inList = new ArrayList<String>(BigList.size());
       Genres = new ArrayList<String>(10);
-      ArrayList<Integer> Ratings = new ArrayList<Integer>(11);
+      Ratings = new ArrayList<Integer>(11);
       size = 0;
-      
     
   }
   private void sweep() {
@@ -133,7 +141,6 @@ public class Backend implements BackendInterface{
     if (Genres.contains(genre)) return;
     Genres.add(genre);
     sweep();
-    if (Genres.get(Genres.size()-2)!=null) doubleGenre();
   }
   public void addAvgRating(String rating) {
     int intRating = Integer.parseInt(rating);
@@ -152,7 +159,7 @@ public class Backend implements BackendInterface{
       current = bigTable.get(itFilms.next());
       itgenre = current.getGenres().iterator();
       while (itFilms.hasNext()) if (Genres.contains(itFilms.next())) genreMatch=true;
-      if (genreMatch | Ratings.contains((Integer)current.getAvgVote().intValue())) {
+      if (genreMatch & Ratings.contains((Integer)current.getAvgVote().intValue())) {
         genreMatch=false;
       }
       else {
@@ -191,21 +198,21 @@ public class Backend implements BackendInterface{
     
   }
   public List<MovieInterface> getThreeMovies(int startingIndex) {
-    Iterator<String> Mvit = keys.iterator();
+    ///System.out.println(keys.toString());
+    List<MovieInterface> workingM = new ArrayList<MovieInterface>();
+    Iterator<String> keyIt = keys.iterator();
+    while (keyIt.hasNext()){
+      workingM.add(bigTable.get(keyIt.next()));
+      
+    }
+    workingM.sort(null);
+    Collections.reverse(workingM);
     ArrayList<MovieInterface> finalM = new ArrayList<MovieInterface>(3);
-    ArrayList<MovieInterface> workingM = new ArrayList<MovieInterface>(keys.size());
-    while (Mvit.hasNext()) {
-      String currentKey = Mvit.next();
-    for (int i=0; i<3; i++) {
-      if (workingM.get(i) == null) workingM.add(bigTable.get(currentKey));
-      else {
-        if (bigTable.get(currentKey).getAvgVote()>workingM.get(i).getAvgVote()) {
-          workingM.add(i,bigTable.get(currentKey));
-        }
-      }
+    for (int i=startingIndex; i<startingIndex+3 | i<workingM.size(); i++) {
+      finalM.add(workingM.get(i));
     }
-    }
-    for (int a=0; a<3; a++) finalM.set(a, workingM.get(a));
+    Collections.reverse(finalM);
+    ///finalM.forEach(member -> System.out.println(member.getAvgVote()));
     return finalM;
   }
   public List<String> getAllGenres() {

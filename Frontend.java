@@ -44,7 +44,7 @@ public class Frontend {
         for(int m = 0; m<movies.size(); m++){
             System.out.println((m+1) + ". " + movies.get(m));
         }
-        String inp = in.nextLine();
+        String inp;
         while(exit==false){
             
             //check mode

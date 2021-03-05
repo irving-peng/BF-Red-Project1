@@ -155,10 +155,10 @@ public class Backend implements BackendInterface{
     MovieInterface current;
     boolean genreMatch = false;
     Iterator<String> itgenre;
-    while (itFilms.hasNext()) {
-      current = bigTable.get(itFilms.next());
+    for (int i=0; i<inList.size(); i++) {
+      current = bigTable.get(inList.get(i));
       itgenre = current.getGenres().iterator();
-      while (itFilms.hasNext()) if (Genres.contains(itFilms.next())) genreMatch=true;
+      while (itgenre.hasNext()) if (Genres.contains(itFilms.next())) genreMatch=true;
       if (genreMatch & Ratings.contains((Integer)current.getAvgVote().intValue())) {
         genreMatch=false;
       }
